@@ -12,13 +12,14 @@ public class Gun : MonoBehaviour
     private float fireCooldown = 0f;
     private float currentSpreadAngle = 0f;
     private bool isFiring = false;
-    private bool isTouching;
+    
+    public bool isheld;
 
     void Update()
     {
         
 
-        if (Input.GetButton("Fire1") && fireCooldown <= 0f & isTouching)
+        if (Input.GetMouseButton(0) && fireCooldown <= 0f & isheld)
         {
             Fire();
             fireCooldown = fireRate;
@@ -28,7 +29,7 @@ public class Gun : MonoBehaviour
                 currentSpreadAngle = maxSpreadAngle;
             }
         }
-         if (Input.GetButton("Fire1"))
+         if (Input.GetMouseButton(0) & isheld)
         {
             isFiring = true;
         }
@@ -63,20 +64,5 @@ public class Gun : MonoBehaviour
         
     }
 
-    void OnTriggerStay2D(Collider2D other)
-    {
-
-        if (other.CompareTag("Hand"))
-        {
-        isTouching = true;
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Hand"))
-        {
-        isTouching = false;
-        }
-    }
+    
 }

@@ -7,6 +7,8 @@ public class pickingup : MonoBehaviour
     public bool canpickup;
     public GameObject currentPickup;
     public GameObject possiblePickup;
+    private  GameObject scroll;
+    public GameObject secondary;
     public bool handsfull;
     // Start is called before the first frame update
     void Start()
@@ -33,10 +35,24 @@ public class pickingup : MonoBehaviour
             currentPickup.transform.position = transform.position;
             currentPickup.transform.rotation = transform.rotation;
         }
+
+         if (Input.GetKeyDown(KeyCode.Q) & handsfull)
+        {
+           swap();
+            
+            
+        }
+
+        if(secondary !=null)
+        {
+            secondary.transform.position = transform.position;
+            secondary.transform.rotation = transform.rotation;
+        }
     }
 
     void drop()
     {
+        currentPickup.GetComponent<Gun>().isheld = false;
         handsfull = false;
         currentPickup.GetComponent<Collider2D>().enabled = true;
     }
@@ -45,6 +61,7 @@ public class pickingup : MonoBehaviour
     {
         handsfull = true;
         currentPickup = possiblePickup.gameObject;
+        currentPickup.GetComponent<Gun>().isheld = true;
         
     }
 
@@ -61,4 +78,16 @@ public class pickingup : MonoBehaviour
       {
         canpickup = false;
       }
+      void swap()
+      {
+             currentPickup.GetComponent<Gun>().isheld = false;
+           scroll = currentPickup;
+            currentPickup = secondary;
+            secondary = scroll;
+            scroll = null;
+            
+            handsfull = false;
+      }
+
+      
 }
