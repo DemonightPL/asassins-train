@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 263383853}
   - component: {fileID: 263383856}
   - component: {fileID: 263383857}
+  - component: {fileID: 263383858}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -298,6 +299,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &263383858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263383851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3904197c1ef1c4f41a6f8983c209e281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bigammo: 100
+  smallammo: 100
+  mediumammo: 100
 --- !u!1 &464235151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,6 +1189,22 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 195837656249428943, guid: de077752bf16c6449ac3bdaa3d71cfc7, type: 3}
+      propertyPath: type
+      value: semi
+      objectReference: {fileID: 0}
+    - target: {fileID: 195837656249428943, guid: de077752bf16c6449ac3bdaa3d71cfc7, type: 3}
+      propertyPath: maxammo
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 195837656249428943, guid: de077752bf16c6449ac3bdaa3d71cfc7, type: 3}
+      propertyPath: ammotype
+      value: small
+      objectReference: {fileID: 0}
+    - target: {fileID: 195837656249428943, guid: de077752bf16c6449ac3bdaa3d71cfc7, type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 263383858}
     - target: {fileID: 315238112654931406, guid: de077752bf16c6449ac3bdaa3d71cfc7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.370592

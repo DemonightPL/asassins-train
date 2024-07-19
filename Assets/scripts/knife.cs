@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SwordSlash : MonoBehaviour
+public class Knife : MonoBehaviour
 {
     public Transform player;
     public PlayerMovement pMov;

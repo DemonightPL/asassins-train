@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ScaleWithSpeed : MonoBehaviour
+public class Sound : MonoBehaviour
 {
     
     public GameObject referenceObject;  
