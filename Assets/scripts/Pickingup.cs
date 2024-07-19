@@ -7,46 +7,45 @@ public class pickingup : MonoBehaviour
     public bool canpickup;
     public GameObject currentPickup;
     public GameObject possiblePickup;
-    private  GameObject scroll;
+    public GameObject scroll;
     public GameObject secondary;
     public bool handsfull;
-    // Start is called before the first frame update
+    public GameObject player;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) & handsfull)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-           
-            drop();
-            
-        }
-        else if(Input.GetKeyDown(KeyCode.E) & canpickup)
-        {
-            take();
+            if (handsfull)
+            {
+                drop();
+            }
+            else if (canpickup)
+            {
+                take();
+            }
         }
         
-        if(handsfull)
+        if (handsfull)
         {
             currentPickup.transform.position = transform.position;
             currentPickup.transform.rotation = transform.rotation;
         }
 
-         if (Input.GetKeyDown(KeyCode.Q) & handsfull)
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-           swap();
-            
-            
+            swap();
         }
 
-        if(secondary !=null)
+        if (secondary != null)
         {
-            secondary.transform.position = transform.position;
-            secondary.transform.rotation = transform.rotation;
+            secondary.transform.position = player.transform.position;
+            secondary.transform.rotation = player.transform.rotation;
         }
     }
 
@@ -55,39 +54,83 @@ public class pickingup : MonoBehaviour
         currentPickup.GetComponent<Gun>().isheld = false;
         handsfull = false;
         currentPickup.GetComponent<Collider2D>().enabled = true;
+        currentPickup = null;
     }
 
     void take()
     {
-        handsfull = true;
-        currentPickup = possiblePickup.gameObject;
-        currentPickup.GetComponent<Gun>().isheld = true;
-        
+        if (handsfull && secondary == null)
+        {
+            secondary = possiblePickup.gameObject;
+            secondary.GetComponent<Gun>().isheld = true;
+            secondary.GetComponent<Collider2D>().enabled = false;
+        }
+        else
+        {
+            handsfull = true;
+            currentPickup = possiblePickup.gameObject;
+            currentPickup.GetComponent<Gun>().isheld = true;
+            currentPickup.GetComponent<Collider2D>().enabled = false;
+        }
+        canpickup = false;
     }
 
-      void OnTriggerEnter2D(Collider2D other)
-      {
+    void OnTriggerEnter2D(Collider2D other)
+    {
         if (other.CompareTag("Weapon"))
         {
             canpickup = true;
-            possiblePickup = other.gameObject;  
+            possiblePickup = other.gameObject;
         }
-      }
+    }
 
-      void OnTriggerExit2D(Collider2D other)
-      {
-        canpickup = false;
-      }
-      void swap()
-      {
-             currentPickup.GetComponent<Gun>().isheld = false;
-           scroll = currentPickup;
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Weapon"))
+        {
+            canpickup = false;
+            possiblePickup = null;
+        }
+    }
+
+    void swap()
+    {
+        if (currentPickup != null && secondary != null)
+        {
+            currentPickup.GetComponent<Gun>().isheld = false;
+            scroll = currentPickup;
             currentPickup = secondary;
             secondary = scroll;
             scroll = null;
-            
-            handsfull = false;
-      }
 
-      
+            if (currentPickup == null)
+            {
+                handsfull = false;
+            }
+            else
+            {
+                currentPickup.GetComponent<Gun>().isheld = true;
+                currentPickup.GetComponent<Collider2D>().enabled = false;
+            }
+
+            if (secondary != null)
+            {
+                secondary.GetComponent<Collider2D>().enabled = true;
+            }
+        }
+        else if (currentPickup != null && secondary == null)
+        {
+            secondary = currentPickup;
+            secondary.GetComponent<Gun>().isheld = false;
+            currentPickup = null;
+            handsfull = false;
+        }
+        else if (currentPickup == null && secondary != null)
+        {
+            currentPickup = secondary;
+            currentPickup.GetComponent<Gun>().isheld = true;
+            secondary = null;
+            handsfull = true;
+        }
+    }
 }

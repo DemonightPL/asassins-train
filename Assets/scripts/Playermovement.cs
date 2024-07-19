@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown = 1f;
     private float dashCooldownTimer = 0f;
     public float maxStamina = 100f;
-    private float currentStamina;
+    public float currentStamina;
     public float staminaDrainRate = 10f;
     public float staminaRecoveryRate = 5f;
     public Rigidbody2D rb;

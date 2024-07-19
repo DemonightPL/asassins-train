@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Hand") || other.gameObject.CompareTag("Weapon")  || firedByPlayer & other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Hand") || other.gameObject.CompareTag("Weapon")  ||  other.gameObject.CompareTag("Knife") || firedByPlayer & other.gameObject.CompareTag("Player"))
         {
             return;
         }
