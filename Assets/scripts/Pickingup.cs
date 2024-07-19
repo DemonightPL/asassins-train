@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class pickingup : MonoBehaviour
 {
-    private bool canpickup;
-    private GameObject currentPickup;
-    private GameObject possiblePickup;
-    private bool handsfull;
+    public bool canpickup;
+    public GameObject currentPickup;
+    public GameObject possiblePickup;
+    public bool handsfull;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,26 +17,28 @@ public class pickingup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.E) & canpickup)
+        if (Input.GetKeyDown(KeyCode.E) & handsfull)
         {
            
-            take();
+            drop();
             
         }
-        else if(Input.GetKey(KeyCode.E) & handsfull)
+        else if(Input.GetKeyDown(KeyCode.E) & canpickup)
         {
-            drop();
+            take();
         }
         
         if(handsfull)
         {
             currentPickup.transform.position = transform.position;
+            currentPickup.transform.rotation = transform.rotation;
         }
     }
 
     void drop()
     {
         handsfull = false;
+        currentPickup.GetComponent<Collider2D>().enabled = true;
     }
 
     void take()
