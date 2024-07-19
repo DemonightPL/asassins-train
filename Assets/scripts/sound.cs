@@ -17,7 +17,7 @@ public class Sound : MonoBehaviour
         previousPosition = referenceObject.transform.position;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         currentPosition = referenceObject.transform.position;
         speed = (currentPosition - previousPosition).magnitude / Time.deltaTime;

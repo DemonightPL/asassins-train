@@ -20,9 +20,13 @@ public class Gun : MonoBehaviour
     private bool reloading;
     public inventory inventory;
     public bool isheld;
+    public bool isheldai;
+    private GameObject pl;
     void Start()
     {
         ammo = maxammo;
+        pl = GameObject.Find("Player");
+        inventory = pl.GetComponent<inventory>();
     }
     void Update()
     {

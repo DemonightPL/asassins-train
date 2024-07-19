@@ -10,7 +10,9 @@ public class enemyAi : MonoBehaviour
     public LayerMask obstacleMask;
     private float dir;
     private bool isAvoidingObstacle = false;
+    public PlayerDetector detector;
 
+    private bool lookforplayer;
     void Start()
     {
         StartCoroutine(MoveInRandomDirection());
@@ -21,7 +23,7 @@ public class enemyAi : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, detectionDistance, obstacleMask);
         Debug.DrawRay(transform.position, transform.up * detectionDistance, Color.red);
 
-        if (hit.collider != null)
+        if (hit.collider != null & lookforplayer)
         {
             if (!isAvoidingObstacle)
             {
@@ -31,10 +33,19 @@ public class enemyAi : MonoBehaviour
         }
         else
         {
-            if (!isAvoidingObstacle)
+            if (!isAvoidingObstacle & lookforplayer)
             {
                 transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
             }
+        }
+
+        if(detector.seeplayer)
+        {
+            lookforplayer = false;
+        }
+        else
+        {
+            lookforplayer = true;
         }
     }
 
@@ -55,7 +66,9 @@ public class enemyAi : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, detectionDistance, obstacleMask);
             if (hit.collider == null)
             {
-                StartCoroutine(wait());
+                transform.Rotate(Vector3.forward * Random.Range(15f, 150f) * dir); 
+                yield return new WaitForSeconds(0.1f); 
+                isAvoidingObstacle = false;
                 break;
             }
             transform.Rotate(Vector3.forward * rotationSpeed * dir * Time.deltaTime);
@@ -67,15 +80,12 @@ public class enemyAi : MonoBehaviour
     {
         while (true)
         {
-            float randomAngle = Random.Range(-25f, 25f);
+            float randomAngle = Random.Range(-90f, 90f);
+            if(lookforplayer)
+            {
             transform.Rotate(Vector3.forward * randomAngle);
+            }
             yield return new WaitForSeconds(2f);
         }
-    }
-
-    IEnumerator wait()
-    {
-        yield return new WaitForSeconds(1f);
-        isAvoidingObstacle = false;
     }
 }
