@@ -11,7 +11,8 @@ public class enemyAi : MonoBehaviour
     private float dir;
     private bool isAvoidingObstacle = false;
     public PlayerDetector detector;
-
+    public GameObject player;
+    public Vector2 directionToPlayer;
     private bool lookforplayer;
     void Start()
     {
@@ -20,6 +21,8 @@ public class enemyAi : MonoBehaviour
 
     void Update()
     {
+        
+        DetectPlayers();
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, detectionDistance, obstacleMask);
         Debug.DrawRay(transform.position, transform.up * detectionDistance, Color.red);
 
@@ -83,9 +86,34 @@ public class enemyAi : MonoBehaviour
             float randomAngle = Random.Range(-90f, 90f);
             if(lookforplayer)
             {
-            transform.Rotate(Vector3.forward * randomAngle);
+             transform.Rotate(Vector3.forward * randomAngle);
             }
+            else
+            {
+                Debug.Log("patrzy");
+                 transform.Rotate(directionToPlayer);
+            }
+            
             yield return new WaitForSeconds(2f);
         }
     }
+
+
+ void DetectPlayers()
+    {
+     Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionDistance);
+
+        foreach (Collider2D hit in hits)
+        {
+            if (hit.CompareTag("Player"))
+            {
+                directionToPlayer = (hit.transform.position - transform.position).normalized;
+              
+            }
+        }
+    }
+
+
+
+
 }

@@ -11,7 +11,7 @@ public class PlayerDetector : MonoBehaviour
     void Update()
     {
         DetectPlayers();
-        
+       
     }
 
     void DetectPlayers()
@@ -25,18 +25,22 @@ public class PlayerDetector : MonoBehaviour
             {
                 Vector2 directionToPlayer = (hit.transform.position - transform.position).normalized;
                 float angle = Vector2.Angle(transform.up, directionToPlayer);
-                
-                if (angle < detectionAngle / 2)
+                  
+                if (angle < detectionAngle)
                 {
+
                     
                     seeplayer = true;
                     
+                    
                 }
-                else
-                {
+                else{
                     seeplayer = false;
                 }
+                
             }
+            
+           
         }
     }
 

@@ -6,8 +6,9 @@ public class Knife : MonoBehaviour
     public PlayerMovement pMov;
     public float rotationSpeed = 500f;
     public float slashAngle = 90f;
-
-    private bool isSlashing = false;
+    public Health health;
+    public int damage = 50;
+    public bool isSlashing = false;
     private float startRotation;
     private float endRotation;
     private float t;
@@ -16,12 +17,13 @@ public class Knife : MonoBehaviour
     {
         FollowPlayer();
 
-        if (Input.GetKeyDown(KeyCode.Z) && !isSlashing & pMov.currentStamina >= 20)
+        if (Input.GetKeyDown(KeyCode.Z) && !isSlashing & pMov.currentStamina >= 20 & health != null)
         {
-            pMov.currentStamina -= 20;
+            pMov.currentStamina -= 5;
             isSlashing = true;
             startRotation = transform.eulerAngles.z;
             endRotation = startRotation + slashAngle;
+            health.TakeDamage(damage);
             t = 0f;
         }
 
@@ -38,10 +40,30 @@ public class Knife : MonoBehaviour
             }
         }
     }
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Hand") || other.gameObject.CompareTag("Weapon")  ||  other.gameObject.CompareTag("Knife") || other.gameObject.CompareTag("Player"))
+        {
+            return;
+        }
+        else
+        {
+            health = other.GetComponent<Collider2D>().gameObject.GetComponent<Health>();
+        }
+
+        
+    }
+    void OnTriggerExit2D(Collider2D other)
+    {
+        health = null;
+
+    }
 
     void FollowPlayer()
     {
         transform.position = player.position;
         transform.rotation = player.rotation;
     }
+     
 }
+
