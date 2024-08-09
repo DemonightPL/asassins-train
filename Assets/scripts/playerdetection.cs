@@ -6,6 +6,7 @@ public class PlayerDetector : MonoBehaviour
     public float detectionAngle = 45f;
     public float detectionDistance = 10f;
     public bool seeplayer;
+    public bool canhear;
     
 
     void Update()
@@ -26,7 +27,7 @@ public class PlayerDetector : MonoBehaviour
                 Vector2 directionToPlayer = (hit.transform.position - transform.position).normalized;
                 float angle = Vector2.Angle(transform.up, directionToPlayer);
                   
-                if (angle < detectionAngle)
+                if (angle < detectionAngle || canhear)
                 {
 
                     
@@ -43,6 +44,8 @@ public class PlayerDetector : MonoBehaviour
            
         }
     }
+    
+
 
     void OnDrawGizmos()
     {
@@ -52,4 +55,5 @@ public class PlayerDetector : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + leftBoundary);
         Gizmos.DrawLine(transform.position, transform.position + rightBoundary);
     }
+
 }

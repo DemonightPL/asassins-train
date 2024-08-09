@@ -5,6 +5,7 @@ public class aigun : MonoBehaviour
 {
     private Renderer objectRenderer;
     public GameObject bulletPrefab;
+    public PlayerDetector enemy;
     public Transform bulletSpawn;
     public float bulletSpeed = 30f;
     public float maxAmmo = 30f; 
@@ -35,6 +36,7 @@ public class aigun : MonoBehaviour
 
     void Update()
     {
+       seePlayer =  enemy.seeplayer;
         if (seePlayer && !reloading)
         {
             HandleNPCShooting();

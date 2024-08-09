@@ -14,6 +14,8 @@ public class enemyAi : MonoBehaviour
     public GameObject player;
     public Vector2 directionToPlayer;
     private bool lookforplayer;
+    public float angle;
+
     void Start()
     {
         StartCoroutine(MoveInRandomDirection());
@@ -21,28 +23,19 @@ public class enemyAi : MonoBehaviour
 
     void Update()
     {
-        
-        DetectPlayers();
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, detectionDistance, obstacleMask);
-        Debug.DrawRay(transform.position, transform.up * detectionDistance, Color.red);
-
-        if (hit.collider != null & lookforplayer)
+        if (!lookforplayer)
         {
-            if (!isAvoidingObstacle)
-            {
-                isAvoidingObstacle = true;
-                StartCoroutine(RotateUntilClear());
-            }
+            LookAtPlayer();
         }
         else
         {
-            if (!isAvoidingObstacle & lookforplayer)
-            {
-                transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
-            }
+            
+            HandleMovement();
         }
 
-        if(detector.seeplayer)
+        DetectPlayers();
+
+        if (detector.seeplayer)
         {
             lookforplayer = false;
         }
@@ -52,18 +45,44 @@ public class enemyAi : MonoBehaviour
         }
     }
 
+    void HandleMovement()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, detectionDistance, obstacleMask);
+        Debug.DrawRay(transform.position, transform.up * detectionDistance, Color.red);
+
+        if (hit.collider != null)
+        {
+            if (!isAvoidingObstacle)
+            {
+                isAvoidingObstacle = true;
+                StartCoroutine(RotateUntilClear());
+            }
+        }
+        else
+        {
+            if (!isAvoidingObstacle)
+            {
+                transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
+            }
+        }
+    }
+
+    void LookAtPlayer()
+    {
+        if (player != null)
+        {
+            Vector2 directionToPlayer = (player.transform.position - transform.position).normalized;
+            float angle = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg - 90f;
+            Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+    }
+
     IEnumerator RotateUntilClear()
     {
         float randomDirection = Random.Range(0f, 2f);
-        switch(randomDirection)
-        {
-            case > 1f:
-            dir = 1f;
-            break;
-            case < 1f:
-            dir = -1f;
-            break;
-        }
+        dir = randomDirection > 1f ? 1f : -1f;
+
         while (true)
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, detectionDistance, obstacleMask);
@@ -83,37 +102,27 @@ public class enemyAi : MonoBehaviour
     {
         while (true)
         {
-            float randomAngle = Random.Range(-90f, 90f);
-            if(lookforplayer)
+            if (lookforplayer)
             {
-             transform.Rotate(Vector3.forward * randomAngle);
+                float randomAngle = Random.Range(-90f, 90f);
+                transform.Rotate(Vector3.forward * randomAngle);
             }
-            else
-            {
-                Debug.Log("patrzy");
-                 transform.Rotate(directionToPlayer);
-            }
-            
+
             yield return new WaitForSeconds(2f);
         }
     }
 
-
- void DetectPlayers()
+    void DetectPlayers()
     {
-     Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionDistance);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 20f);
 
         foreach (Collider2D hit in hits)
         {
             if (hit.CompareTag("Player"))
             {
                 directionToPlayer = (hit.transform.position - transform.position).normalized;
-              
+                angle = Vector2.Angle(transform.up, directionToPlayer);
             }
         }
     }
-
-
-
-
 }

@@ -8,6 +8,7 @@ public class Sound : MonoBehaviour
 
     private Vector3 previousPosition;
     private Vector3 currentPosition;
+    public PlayerDetector script;
     private float speed;
 
     void Start()
@@ -15,6 +16,22 @@ public class Sound : MonoBehaviour
         
 
         previousPosition = referenceObject.transform.position;
+    }
+    private void OnTriggerStay2D(Collider2D other)
+    {
+
+        if (other.CompareTag("Enemy"))
+            {
+                script = other.gameObject.GetComponent<PlayerDetector>();
+                script.canhear = true;
+            }
+            else
+            {
+                    script.canhear = false;
+            }
+           
+
+
     }
 
     void FixedUpdate()
